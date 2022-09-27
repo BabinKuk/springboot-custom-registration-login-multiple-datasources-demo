@@ -42,50 +42,50 @@ public class EmployeeController {
 		return "employees/list-employees";
 	}
 	
-//	// expose GET "/employees/showFormForAdd"
-//	@GetMapping("/showFormForAdd")
-//	public String showFormForAdd(Model theModel) {
-//		
-//		// create model
-//		Employee employee = new Employee();
-//		
-//		theModel.addAttribute("employee", employee);
-//		
-//		return "employees/employee-form";
-//	}
-//	
-//	// expose GET "/employees/showFormForUpdate"
-//	@GetMapping("/showFormForUpdate")
-//	public String showFormForUpdate(@RequestParam("employeeId") int id, Model theModel) {
-//		
-//		// get employee
-//		Employee employee = employeeService.findById(id);
-//		
-//		theModel.addAttribute("employee", employee);
-//		
-//		return "employees/employee-form";
-//	}
-//	
-//	// expose POST "/employees/save"
-//	@PostMapping("/save")
-//	public String saveEmployee(@ModelAttribute("employee") Employee employee) {
-//		
-//		// şave employee
-//		employeeService.save(employee);
-//		
-//		// redirect to prevent duplicate submissions
-//		return "redirect:/employees/list";
-//	}
-//	
-//	// expose GET "/employees/delete"
-//	@GetMapping("/delete")
-//	public String deleteEmployee(@RequestParam("employeeId") int id) {
-//		
-//		// delete employee
-//		employeeService.delete(id);
-//		
-//		// redirect to prevent duplicate submissions
-//		return "redirect:/employees/list";
-//	}
+	// expose GET "/employees/showFormForAdd"
+	@GetMapping("/showFormForAdd")
+	public String showFormForAdd(Model theModel) {
+		
+		// create model
+		Employee employee = new Employee();
+		
+		theModel.addAttribute("employee", employee);
+		
+		return "employees/employee-form";
+	}
+	
+	// expose GET "/employees/showFormForUpdate"
+	@GetMapping("/showFormForUpdate")
+	public String showFormForUpdate(@RequestParam("employeeId") int id, Model theModel) {
+		
+		// get employee
+		Employee employee = employeeService.findById(id);
+		
+		theModel.addAttribute("employee", employee);
+		
+		return "employees/employee-form";
+	}
+	
+	// expose POST "/employees/save"
+	@PostMapping("/save")
+	public String saveEmployee(@ModelAttribute("employee") Employee employee) {
+		
+		// şave employee
+		employeeService.save(employee);
+		
+		// redirect to prevent duplicate submissions
+		return "redirect:/employees";
+	}
+	
+	// expose GET "/employees/delete"
+	@GetMapping("/delete")
+	public String deleteEmployee(@RequestParam("employeeId") int id) {
+		
+		// delete employee
+		employeeService.delete(id);
+		
+		// redirect to prevent duplicate submissions
+		return "redirect:/employees";
+	}
 
 }

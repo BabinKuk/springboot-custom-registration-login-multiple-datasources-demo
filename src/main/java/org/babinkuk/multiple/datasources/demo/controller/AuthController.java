@@ -64,17 +64,7 @@ public class AuthController {
         
 		userService.saveUser(userDao);
 		
-		//return "redirect:/register?success";
 		return "registration-confirmation";
     }
 	
-	// handler method to handle list of users
-	@GetMapping("/users")
-	public String users(Model model){
-		
-		List<UserDao> users = userService.getUsers();
-		model.addAttribute("users", users);
-		return "users/list-users";
-	}
-
 }

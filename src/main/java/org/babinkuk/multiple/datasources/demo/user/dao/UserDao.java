@@ -9,6 +9,8 @@ import javax.validation.constraints.Size;
 //})
 public class UserDao {
 
+	private int id;
+	
 	@NotNull(message = "is required")
 	@Size(min = 1, message = "is required")
 	private String username;
@@ -37,7 +39,15 @@ public class UserDao {
 	public UserDao() {
 
 	}
+	
+	public int getId() {
+		return id;
+	}
 
+	public void setId(int id) {
+		this.id = id;
+	}
+	
 	public String getUsername() {
 		return username;
 	}
@@ -88,8 +98,7 @@ public class UserDao {
 
 	@Override
 	public String toString() {
-		return "UserDao [username=" + username + ", password=" + "******" + ", firstName=" + firstName + ", lastName="
+		return "UserDao [id=" + id + ", username=" + username + ", password=" + "******" + ", firstName=" + firstName + ", lastName="
 				+ lastName + ", email=" + email + "]";
 	}
-
 }

@@ -18,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -37,7 +38,13 @@ public class UserServiceImpl implements UserService {
 		this.roleRepository = roleRepository;
 		this.passwordEncoder = passwordEncoder;
 	}
-
+	
+	@Override
+	public Optional<User> findById(Integer id) {
+		// check the database if the user already exists
+		return userRepository.findById(id);
+	}
+	
 	@Override
 	public User findByUsername(String username) {
 		// check the database if the user already exists
@@ -50,6 +57,7 @@ public class UserServiceImpl implements UserService {
 		
 		User user = new User();
 		// assign user details to the user object
+		user.setId(userDao.getId());
 		user.setUsername(userDao.getUsername());
 		user.setPassword(passwordEncoder.encode(userDao.getPassword()));
 		user.setFirstName(userDao.getFirstName());
@@ -61,8 +69,6 @@ public class UserServiceImpl implements UserService {
 		if(role == null) {
 			role = checkRoleExist();
 		}
-		
-//		user.setRoles(Arrays.asList(roleDao.findRoleByName("ROLE_EMPLOYEE")));
 		user.setRoles(Arrays.asList(role));
 		
 		// save user in the database
@@ -79,13 +85,20 @@ public class UserServiceImpl implements UserService {
                 .collect(Collectors.toList());
 	}
 	
+	@Override
+	public void delete(int id) {
+		userRepository.deleteById(id);
+	}
+	
 	private UserDao mapToUserDao(User user) {
 
 		UserDao userDao = new UserDao();
+		userDao.setId(user.getId());
 		userDao.setFirstName(user.getFirstName());
 		userDao.setLastName(user.getLastName());
 		userDao.setEmail(user.getEmail());
 		userDao.setPassword(user.getPassword());
+		
 		return userDao;
 	}
 

@@ -8,7 +8,7 @@ import org.babinkuk.multiple.datasources.demo.user.entity.User;
 
 public interface UserService {
 	
-	public User findByUsername(String username);
+	public UserDao findByUsername(String username);
 
 	public void saveUser(UserDao userDao);
 	

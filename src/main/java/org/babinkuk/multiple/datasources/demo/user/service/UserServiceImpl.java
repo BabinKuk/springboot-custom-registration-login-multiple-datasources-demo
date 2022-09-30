@@ -56,9 +56,17 @@ public class UserServiceImpl implements UserService {
 	}
 	
 	@Override
-	public User findByUsername(String username) {
+	public UserDao findByUsername(String username) {
 		// check the database if the user already exists
-		return userRepository.findByUsername(username);
+		User existingUser = userRepository.findByUsername(username);
+		
+		UserDao userDao = null;
+		
+		if (existingUser != null) {
+			userDao = mapToUserDao(existingUser);
+		}
+		
+		return userDao;
 	}
 
 	@Override

@@ -71,10 +71,17 @@ public class UserController {
 	
 	// expose GET "/users/showFormForUpdate"
 	@GetMapping("/showFormForUpdate")
-	public String showFormForUpdate(@RequestParam("userId") int id, Model theModel) {
+	public String showFormForUpdate(@RequestParam(required = false) Integer id, @RequestParam(required = false) String username, Model theModel) {
+		
+//		System.out.println("paramters : " + id + "; username " + username);
+		UserDao user = null;
 		
 		// get user
-		UserDao user = userService.findById(id);
+		if (id != null) {
+			user = userService.findById(id);
+		} else {
+			user = userService.findByUsername(username);
+		}
 				
 		System.out.println("get : " + user.getPassword());
 		
@@ -115,7 +122,7 @@ public class UserController {
 	
 	// expose GET "/users/delete"
 	@GetMapping("/delete")
-	public String deleteUser(@RequestParam("userId") int id) {
+	public String deleteUser(@RequestParam Integer id) {
 		
 		// delete user
 		userService.delete(id);

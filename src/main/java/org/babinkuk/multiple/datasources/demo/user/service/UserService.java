@@ -14,7 +14,8 @@ public interface UserService {
 	
 	public List<UserDao> getUsers();
 
-	public Optional<User> findById(Integer id);
+	public UserDao findById(Integer id);
 	
 	public void delete(int id);
+
 }

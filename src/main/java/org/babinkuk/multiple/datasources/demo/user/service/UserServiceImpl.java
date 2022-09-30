@@ -40,9 +40,19 @@ public class UserServiceImpl implements UserService {
 	}
 	
 	@Override
-	public Optional<User> findById(Integer id) {
+	public UserDao findById(Integer id) {
 		// check the database if the user already exists
-		return userRepository.findById(id);
+		Optional<User> existingUser = userRepository.findById(id);
+		
+		User user = null;
+		UserDao userDao = null;
+		
+		if (existingUser.isPresent()) {
+			user = existingUser.get();
+			userDao = mapToUserDao(user);
+		}
+		
+		return userDao;
 	}
 	
 	@Override
@@ -63,13 +73,17 @@ public class UserServiceImpl implements UserService {
 		user.setFirstName(userDao.getFirstName());
 		user.setLastName(userDao.getLastName());
 		user.setEmail(userDao.getEmail());
+		user.setRoles(userDao.getRoles());
 		
 		// give user default role of "employee"
-		Role role = roleRepository.findByName("ROLE_EMPLOYEE");
-		if(role == null) {
-			role = checkRoleExist();
+		if (user.getRoles() == null) {
+			System.out.println("empty roles");
+			Role role = roleRepository.findByName("ROLE_EMPLOYEE");
+			if(role == null) {
+				role = checkRoleExist();
+			}
+			user.setRoles(Arrays.asList(role));
 		}
-		user.setRoles(Arrays.asList(role));
 		
 		// save user in the database
 		userRepository.save(user);
@@ -97,8 +111,11 @@ public class UserServiceImpl implements UserService {
 		userDao.setFirstName(user.getFirstName());
 		userDao.setLastName(user.getLastName());
 		userDao.setEmail(user.getEmail());
+		userDao.setUsername(user.getUsername());
 		userDao.setPassword(user.getPassword());
+		userDao.setRoles(user.getRoles());
 		
+		System.out.println(userDao.toString());
 		return userDao;
 	}
 

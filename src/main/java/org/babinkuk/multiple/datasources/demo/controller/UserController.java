@@ -6,9 +6,12 @@ import java.util.Optional;
 import javax.validation.Valid;
 
 import org.babinkuk.multiple.datasources.demo.user.dao.UserDao;
+import org.babinkuk.multiple.datasources.demo.user.entity.Role;
 import org.babinkuk.multiple.datasources.demo.user.entity.User;
+import org.babinkuk.multiple.datasources.demo.user.repository.RoleRepository;
 import org.babinkuk.multiple.datasources.demo.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -22,11 +25,20 @@ import org.springframework.web.bind.annotation.RequestParam;
 @RequestMapping("/users")
 public class UserController {
 	
+	@Autowired
 	private UserService userService;
 	
 	@Autowired
-	public UserController(UserService userService) {
+	private RoleRepository roleRepository;
+	
+	@Autowired
+	private PasswordEncoder passwordEncoder;
+	
+	@Autowired
+	public UserController(UserService userService, RoleRepository roleRepository, PasswordEncoder passwordEncoder) {
 		this.userService = userService;
+		this.roleRepository = roleRepository;
+		this.passwordEncoder = passwordEncoder;
 	}
 	
 	// handler method to handle list of users
@@ -50,6 +62,10 @@ public class UserController {
 		
 		theModel.addAttribute("user", user);
 		
+		List<Role> roles = (List<Role>) roleRepository.findAll();
+		
+		theModel.addAttribute("allRoles", roles);
+		
 		return "users/user-form";
 	}
 	
@@ -58,35 +74,41 @@ public class UserController {
 	public String showFormForUpdate(@RequestParam("userId") int id, Model theModel) {
 		
 		// get user
-		Optional<User> existingUser = userService.findById(id);
-		
-		User user = null;
-		
-		if (existingUser.isPresent()) {
-			user = existingUser.get();
-		}
+		UserDao user = userService.findById(id);
+				
+		System.out.println("get : " + user.getPassword());
 		
 		theModel.addAttribute("user", user);
+		
+		List<Role> roles = (List<Role>) roleRepository.findAll();
+		
+		theModel.addAttribute("allRoles", roles);
 		
 		return "users/user-form";
 	}
 	
-	// handler method to handle user registration form submit request
+	// handler method to handle user data form submit request
 	@PostMapping("/save")
-	public String saveUSer(@Valid @ModelAttribute("user") UserDao userDao, BindingResult result, Model model) {
+	public String saveUser(@Valid @ModelAttribute("user") UserDao userDao, BindingResult result, Model model) {
 		
-//		User existingUser = userService.findByUsername(userDao.getUsername());
-//        
-//		if (existingUser != null && existingUser.getUsername() != null && !existingUser.getUsername().isEmpty()) {
-//        	result.rejectValue("username", null, "There is already an account registered with the same username");
-//        }
-//        
-//        if (result.hasErrors()) {
-//			model.addAttribute("user", userDao);
-//			return "/showFormForUpdate";
-//        }
+		if (result.hasErrors()) {
+			System.err.println("has errors " + userDao.toString());
+			model.addAttribute("user", userDao);
+			List<Role> roles = (List<Role>) roleRepository.findAll();
+			model.addAttribute("allRoles", roles);
+			return "/users/user-form";
+        }
         
-		userService.saveUser(userDao);
+//		// get user
+//		UserDao existingUser = userService.findById(userDao.getId());
+//		
+//		System.out.println(userDao.getPassword() + " , id : " + userDao.getId());
+//		System.out.println(existingUser.getPassword() + " , id : " + existingUser.getId());
+//		
+//		boolean passwordMatch = passwordEncoder.matches(userDao.getPassword(), existingUser.getPassword());
+//        System.out.println("passwordMatch : " + passwordMatch);
+//        
+        userService.saveUser(userDao);
 		
 		return "redirect:/users?success";
     }

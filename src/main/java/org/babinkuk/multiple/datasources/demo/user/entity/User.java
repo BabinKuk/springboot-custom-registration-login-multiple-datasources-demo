@@ -27,15 +27,17 @@ public class User {
 	@Column(name = "email")
 	private String email;
 
-	@ManyToMany(fetch = FetchType.LAZY,
-			cascade = {
-					CascadeType.PERSIST,
-					CascadeType.DETACH,
-					CascadeType.MERGE,
-					CascadeType.REFRESH})
-	@JoinTable(name = "users_roles", 
-	joinColumns = @JoinColumn(name = "user_id"), 
-	inverseJoinColumns = @JoinColumn(name = "role_id"))
+	@ManyToMany(
+		fetch = FetchType.LAZY,
+		cascade = {
+				CascadeType.PERSIST,
+				CascadeType.DETACH,
+				CascadeType.MERGE,
+				CascadeType.REFRESH})
+	@JoinTable(
+		name = "users_roles", 
+		joinColumns = @JoinColumn(name = "user_id"), 
+		inverseJoinColumns = @JoinColumn(name = "role_id"))
 	private Collection<Role> roles;
 
 	public User() {

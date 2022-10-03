@@ -51,7 +51,7 @@ public class AuthController {
 	@PostMapping("/register/save")
 	public String registration(@Valid @ModelAttribute("user") UserDao userDao, BindingResult result, Model model) {
 		
-		User existingUser = userService.findByUsername(userDao.getUsername());
+		UserDao existingUser = userService.findByUsername(userDao.getUsername());
         
 		if (existingUser != null && existingUser.getUsername() != null && !existingUser.getUsername().isEmpty()) {
         	result.rejectValue("username", null, "There is already an account registered with the same username");

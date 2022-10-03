@@ -73,7 +73,6 @@ public class UserController {
 	@GetMapping("/showFormForUpdate")
 	public String showFormForUpdate(@RequestParam(required = false) Integer id, @RequestParam(required = false) String username, Model theModel) {
 		
-//		System.out.println("paramters : " + id + "; username " + username);
 		UserDao user = null;
 		
 		// get user
